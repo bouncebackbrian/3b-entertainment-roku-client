@@ -1,78 +1,47 @@
 sub init()
-    m.nav = m.top.findNode("nav")
-    m.contentHost = m.top.findNode("contentHost")
-
-    ' Put your M3U URL here (or set m3uUrl from elsewhere later)
-    if m.top.m3uUrl = invalid or m.top.m3uUrl = "" then
-        ' EXAMPLE PLACEHOLDER (change this to your real playlist URL)
-                m.top.m3uUrl = GetM3UUrl()  ' From source/config.brs
-    end if
-    
-    ' Get TMDB backend URL from config
-    m.tmdbBackendUrl = GetTMDBBackendUrl()
-
-    buildNav()
-    m.nav.observeField("itemSelected", "onNavSelected")
-
-    showView("load")
+    m.names = ["HOME", "LIVE TV", "GUIDE", "MOVIES", "SERIES", "SETTINGS"]
+    m.descriptions = ["Welcome to 3B Entertainment.", "Live TV screen opened. Playlist connection comes next.", "Guide screen opened. EPG data comes next.", "Movies screen opened. Catalog integration comes next.", "Series screen opened. Episodes and seasons come next.", "Settings screen opened. Source setup comes next."]
+    m.index = 0
+    m.opened = false
+    m.highlight = m.top.findNode("highlight")
+    m.title = m.top.findNode("sectionTitle")
+    m.body = m.top.findNode("sectionBody")
+    m.top.setFocus(true)
+    renderScreen()
 end sub
 
-sub buildNav()
-    items = CreateObject("roSGNode", "ContentNode")
-
-    addNav(items, "Load Zone", "load")
-    addNav(items, "Live TV", "live")
-    addNav(items, "Guide", "guide")
-    addNav(items, "Movies", "movies")
-    addNav(items, "Settings", "settings")
-
-    m.nav.content = items
-    m.nav.itemSelected = 0
-end sub
-
-sub addNav(parent as object, title as string, id as string)
-    n = CreateObject("roSGNode", "ContentNode")
-    n.title = title
-    n.id = id
-    parent.appendChild(n)
-end sub
-
-sub onNavSelected()
-    idx = m.nav.itemSelected
-    if idx < 0 then return
-
-    node = m.nav.content.getChild(idx)
-    if node = invalid then return
-
-    showView(node.id)
-end sub
-
-sub clearHost()
-    if m.contentHost.getChildCount() > 0
-        m.contentHost.removeChildrenIndex(0, m.contentHost.getChildCount())
-    end if
-end sub
-
-sub showView(viewId as string)
-    clearHost()
-
-    view = invalid
-
-    if viewId = "load"
-        view = CreateObject("roSGNode", "LoadZoneView")
-    else if viewId = "live"
-        view = CreateObject("roSGNode", "ChannelsView")
-        view.m3uUrl = m.top.m3uUrl
-    else if viewId = "guide"
-        view = CreateObject("roSGNode", "GuideView")
-    else if viewId = "movies"
-        view = CreateObject("roSGNode", "MovieView")
-        view.tmdbBackendUrl = m.tmdbBackendUrl
-    else if viewId = "settings"
-        view = CreateObject("roSGNode", "SettingsScene")
+sub renderScreen()
+    m.highlight.translation = [63, 202 + (m.index * 72)]
+    if m.opened then
+        m.title.text = m.names[m.index]
+        m.body.text = m.descriptions[m.index]
     else
-        view = CreateObject("roSGNode", "LoadZoneView")
+        m.title.text = "HOME"
+        m.body.text = "Choose a section and press OK to open it."
     end if
-
-    m.contentHost.appendChild(view)
 end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
+    if key = "down" then
+        m.index = (m.index + 1) mod m.names.count()
+        m.opened = false
+        renderScreen()
+        return true
+    else if key = "up" then
+        m.index = (m.index + m.names.count() - 1) mod m.names.count()
+        m.opened = false
+        renderScreen()
+        return true
+    else if key = "OK" then
+        m.opened = true
+        renderScreen()
+        return true
+    else if key = "back" then
+        m.index = 0
+        m.opened = false
+        renderScreen()
+        return true
+    end if
+    return false
+end function
