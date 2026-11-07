@@ -1,4 +1,12 @@
 sub init()
+    m.clock = m.top.findNode("clock")
+    m.clockTimer = CreateObject("roSGNode", "Timer")
+    m.clockTimer.duration = 30
+    m.clockTimer.repeat = true
+    m.clockTimer.observeField("fire", "updateClock")
+    updateClock()
+    m.clockTimer.control = "start"
+
     m.nav = m.top.findNode("nav")
     m.contentHost = m.top.findNode("contentHost")
 
@@ -75,4 +83,17 @@ sub showView(viewId as string)
     end if
 
     m.contentHost.appendChild(view)
+end sub
+
+sub updateClock()
+    dt = CreateObject("roDateTime")
+    dt.ToLocalTime()
+    hour = dt.GetHours()
+    suffix = "AM"
+    if hour >= 12 then suffix = "PM"
+    displayHour = hour mod 12
+    if displayHour = 0 then displayHour = 12
+    minute = dt.GetMinutes().ToStr()
+    if dt.GetMinutes() < 10 then minute = "0" + minute
+    m.clock.text = displayHour.ToStr() + ":" + minute + " " + suffix
 end sub
