@@ -1,33 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="MainScene" extends="Scene">
-  <interface>
-    <field id="m3uUrl" type="string" />
-  </interface>
-
   <children>
-    <Rectangle id="bg" width="1280" height="720" color="0x000000FF" />
-
-    <Group id="root" translation="[40,40]">
-      <Label
-        id="brand"
-        text="3B ENTERTAINMENT"
-        translation="[0,0]"
-        width="1200"
-        height="40"
-        color="0xFFD700FF" />
-
-      <Group id="layout" translation="[0,70]">
-        <MarkupList
-          id="nav"
-          itemSize="[260,56]"
-          translation="[0,0]"
-          width="260"
-          height="610" />
-
-        <Group id="contentHost" translation="[300,0]" />
-      </Group>
-    </Group>
+    <Rectangle width="1280" height="720" color="0x080808FF" />
+    <Label id="heading" text="3B ENTERTAINMENT" translation="[80,90]" width="1100" height="80" font="font:LargeBoldSystemFont" color="0xFFD700FF" />
+    <Label text="ROKU STARTUP DIAGNOSTIC" translation="[80,200]" width="1000" height="50" color="0xFFFFFFFF" />
+    <Label text="If you see this screen, Roku SceneGraph startup is working." translation="[80,275]" width="1100" height="45" color="0xCCCCCCFF" />
+    <Label text="Build: V8 diagnostic 01" translation="[80,340]" width="1000" height="40" color="0xFFD700FF" />
   </children>
-
   <script type="text/brightscript" uri="pkg:/components/MainScene.brs" />
 </component>
