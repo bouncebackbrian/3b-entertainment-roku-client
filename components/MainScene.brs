@@ -32,6 +32,7 @@ sub buildNav()
     addNav(items, "Live TV", "live")
     addNav(items, "Guide", "guide")
     addNav(items, "Movies", "movies")
+    addNav(items, "Series", "series")
     addNav(items, "Settings", "settings")
 
     m.nav.content = items
@@ -76,6 +77,8 @@ sub showView(viewId as string)
     else if viewId = "movies"
         view = CreateObject("roSGNode", "MovieView")
         view.tmdbBackendUrl = m.tmdbBackendUrl
+    else if viewId = "series"
+        view = CreateObject("roSGNode", "SeriesView")
     else if viewId = "settings"
         view = CreateObject("roSGNode", "SettingsScene")
     else
