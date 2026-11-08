@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="SeriesView" extends="Group">
+  <children>
+    <Label text="SERIES" translation="[20,20]" color="0xFFD700FF" font="font:LargeBoldSystemFont" />
+    <Label text="Connect an authorized series source to browse seasons and episodes." translation="[20,85]" width="850" color="0xFFFFFFFF" />
+  </children>
+</component>
